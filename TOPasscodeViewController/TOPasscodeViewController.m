@@ -42,6 +42,7 @@
 @property (nonatomic, strong, readwrite) UIButton *biometricButton;
 @property (nonatomic, strong, readwrite) UIButton *cancelButton;
 
+@property (nonatomic, strong) UIButton *backButton;
 
 @end
 
@@ -202,8 +203,29 @@
     [self setUpBackgroundEffectViewForStyle:self.style];
     [self setUpBackgroundViewForStyle:self.style];
     [self setUpAccessoryButtons];
+    [self setUpCustomNavi];
     [self applyThemeForStyle:self.style];
 }
+
+- (void)setUpCustomNavi {
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(10, 20, 40, 44);
+    backButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    [backButton setTitle:@"╳" forState:UIControlStateNormal];
+    [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:backButton];
+    self.backButton = backButton;
+}
+
+- (void)backButtonClick:(UIButton *)button {
+    if (self.navigationController) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 
 - (void)viewDidAppear:(BOOL)animated
 {

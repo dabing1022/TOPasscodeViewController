@@ -53,6 +53,8 @@ const CGFloat kTOPasscodeKeypadMaxHeight = 330.0f;
 @property (nonatomic, strong) UIBarButtonItem *nextBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *doneBarButtonItem;
 
+@property (nonatomic, strong) UIButton *backButton;
+
 @end
 
 @implementation TOPasscodeSettingsViewController
@@ -136,6 +138,7 @@ const CGFloat kTOPasscodeKeypadMaxHeight = 330.0f;
 
     // Create error label view
     self.errorLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.errorLabel.textColor = [UIColor blackColor];
     self.errorLabel.text = NSLocalizedString(@"Passcodes didn't match. Try again.", @"");
     self.errorLabel.textAlignment = NSTextAlignmentCenter;
     self.errorLabel.font = [UIFont systemFontOfSize:15.0f];
@@ -176,6 +179,8 @@ const CGFloat kTOPasscodeKeypadMaxHeight = 330.0f;
     self.nextBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Next", @"") style:UIBarButtonItemStylePlain target:self action:@selector(nextButtonTapped:)];
     self.doneBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonTapped:)];
 
+    [self setUpCustomNavi];
+    
     // Apply light/dark mode
     [self applyThemeForStyle:self.style];
 }
@@ -186,6 +191,25 @@ const CGFloat kTOPasscodeKeypadMaxHeight = 330.0f;
 
     self.state = self.requireCurrentPasscode ? TOPasscodeSettingsViewStateEnterCurrentPasscode : TOPasscodeSettingsViewStateEnterNewPasscode;
     [self updateContentForState:self.state type:self.passcodeType animated:NO];
+}
+
+- (void)setUpCustomNavi {
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(10, 20, 40, 44);
+    backButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    [backButton setTitle:@"╳" forState:UIControlStateNormal];
+    [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:backButton];
+    self.backButton = backButton;
+}
+
+- (void)backButtonClick:(UIButton *)button {
+    if (self.navigationController) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 #pragma mark - View Update -
@@ -438,6 +462,10 @@ const CGFloat kTOPasscodeKeypadMaxHeight = 330.0f;
 
     // Set the number input tint
     self.inputField.tintColor = inputColor;
+    
+    self.errorLabel.textColor = inputColor;
+
+    [self.backButton setTitleColor:inputColor forState:UIControlStateNormal];
 
     // Set the tint color of the incorrect warning label
     UIColor *warningColor = nil;
