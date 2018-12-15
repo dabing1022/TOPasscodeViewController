@@ -331,6 +331,7 @@
     }
 
     self.submitButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.submitButton setTitle:@"OK" forState:UIControlStateNormal];
     [self.submitButton addTarget:self action:@selector(submitButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.submitButton.titleLabel setFont:[UIFont systemFontOfSize:18.0f]];

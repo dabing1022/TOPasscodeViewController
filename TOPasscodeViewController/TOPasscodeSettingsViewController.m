@@ -238,6 +238,7 @@ const CGFloat kTOPasscodeKeypadMaxHeight = 330.0f;
     else {
         self.inputField.style = TOPasscodeInputFieldStyleVariable;
     }
+    self.inputField.showSubmitButton = (self.passcodeType == TOPasscodeTypeCustomNumeric);
 
     // Update text depending on state
     switch (state) {
